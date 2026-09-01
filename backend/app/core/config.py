@@ -18,7 +18,7 @@ class Settings(BaseSettings):
     ]
     
     # AI Providers
-    DEFAULT_GROQ_KEY: str = "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"
+    DEFAULT_GROQ_KEY: str = ""
     GROQ_API_KEY: Optional[str] = None
     OPENAI_API_KEY: Optional[str] = None
     DEFAULT_MODEL: str = "llama-3.1-8b-instant"

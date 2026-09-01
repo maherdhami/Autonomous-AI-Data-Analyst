@@ -8,7 +8,7 @@ import plotly.graph_objects as go
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_groq import ChatGroq
 
-DEFAULT_GROQ_KEY = "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"
+DEFAULT_GROQ_KEY = os.getenv("GROQ_API_KEY", "")
 
 def get_groq_model(api_key=None, model_name="llama-3.1-8b-instant"):
     key = api_key.strip() if (api_key and api_key.strip()) else DEFAULT_GROQ_KEY
