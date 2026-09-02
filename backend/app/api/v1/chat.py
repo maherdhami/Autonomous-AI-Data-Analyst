@@ -7,8 +7,8 @@ from app.schemas.auth import UserResponse
 from app.schemas.common import ResponseModel
 from app.middleware.auth_middleware import get_current_user
 from app.services.chat_service import chat_service
-from app.database.firestore import db_repo
 from app.api.v1.analysis import get_dataframe
+from app.utils.data_processing import extract_summary
 
 router = APIRouter()
 
@@ -28,11 +28,7 @@ async def chat_with_analyst(req: ChatRequest, current_user: UserResponse = Depen
     df = get_dataframe(req.file_id) if req.file_id else get_dataframe()
 
     # Get dataset summary
-    if df is not None:
-        from app.utils.data_processing import extract_summary
-        summary = extract_summary(df)
-    else:
-        summary = {}
+    summary = extract_summary(df) if df is not None else {}
 
     # Generate answer
     if req.mode == "code" and df is not None:
@@ -62,7 +58,6 @@ async def get_chat_history(session_id: Optional[str] = None, current_user: UserR
     if session_id:
         msgs = _chat_memory.get(session_id, [])
     else:
-        # All messages across all sessions
         msgs = [m for session in _chat_memory.values() for m in session]
         msgs = sorted(msgs, key=lambda x: x.get("timestamp", 0))
 
